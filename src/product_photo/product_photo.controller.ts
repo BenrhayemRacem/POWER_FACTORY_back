@@ -1,7 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseInterceptors,
+  UploadedFiles,
+} from '@nestjs/common';
 import { ProductPhotoService } from './product_photo.service';
 import { CreateProductPhotoDto } from './dto/create-product_photo.dto';
 import { UpdateProductPhotoDto } from './dto/update-product_photo.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { editFileName } from '../utilities/filename.utility';
 
 @Controller('product-photo')
 export class ProductPhotoController {
@@ -10,6 +23,22 @@ export class ProductPhotoController {
   @Post()
   create(@Body() createProductPhotoDto: CreateProductPhotoDto) {
     return this.productPhotoService.create(createProductPhotoDto);
+  }
+
+  @Post('/:productId')
+  @UseInterceptors(
+    FilesInterceptor('files', 10, {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: editFileName,
+      }),
+    }),
+  )
+  addPhotoToExistingProduct(
+    @Param('productId') id: number,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
+    return this.productPhotoService.addPhotos(id, files);
   }
 
   @Get()
@@ -23,7 +52,10 @@ export class ProductPhotoController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductPhotoDto: UpdateProductPhotoDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateProductPhotoDto: UpdateProductPhotoDto,
+  ) {
     return this.productPhotoService.update(+id, updateProductPhotoDto);
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -17,7 +17,7 @@ export class ProductService {
     files: Array<Express.Multer.File>,
   ) {
     const product = await this.productRepository.save(createProductDto);
-    await this.productPhotoService.addPhotos(product, files);
+    await this.productPhotoService.addPhotos(product.id, files);
     return product;
   }
 
@@ -29,8 +29,18 @@ export class ProductService {
     return `This action returns a #${id} product`;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(
+    id: number,
+    updateProductDto: UpdateProductDto,
+  ) {
+    const productToUpdate = await this.productRepository.preload({
+      id,
+      ...updateProductDto,
+    });
+    if (productToUpdate) {
+      await this.productRepository.save(productToUpdate);
+    }
+    throw new NotFoundException(`product with id: ${id} not found`);
   }
 
   remove(id: number) {
