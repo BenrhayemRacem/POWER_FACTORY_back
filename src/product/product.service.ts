@@ -5,6 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import { ProductPhotoService } from '../product_photo/product_photo.service';
+import { FindOptionsDto } from '../utilities/findOptions.dto';
+import { unlinkFiles } from '../utilities/unlinkFiles';
 
 @Injectable()
 export class ProductService {
@@ -21,29 +23,65 @@ export class ProductService {
     return product;
   }
 
-  findAll() {
-    return `This action returns all product`;
+  async findAll(findOptions: FindOptionsDto) {
+    const queryBuilder = this.productRepository.createQueryBuilder('product');
+    const orderBy = findOptions.orderBy ? findOptions.orderBy : 'createdAt';
+    const sort = findOptions.sort
+      ? findOptions.sort === 'ASC'
+        ? 'ASC'
+        : 'DESC'
+      : 'ASC';
+    const page = findOptions.page ? findOptions.page : 1;
+    const perPage = findOptions.perPage ? findOptions.perPage : 10;
+
+    queryBuilder
+      .orderBy(`product.${orderBy}`, sort)
+      .offset((page - 1) * perPage)
+      .limit(perPage)
+      .leftJoinAndSelect('product.photos', 'photos');
+    const total = await queryBuilder.getCount();
+    return {
+      data: await queryBuilder.getMany(),
+      total,
+      page,
+      numberOfPages: Math.ceil(total / perPage),
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number) {
+    const result = await this.productRepository.findOne({
+      where: { id },
+      relations: { photos: true },
+    });
+    if (!result) {
+      throw new NotFoundException(`product with id: ${id} not found`);
+    }
+    return result;
   }
 
-  async update(
-    id: number,
-    updateProductDto: UpdateProductDto,
-  ) {
+  async update(id: number, updateProductDto: UpdateProductDto) {
     const productToUpdate = await this.productRepository.preload({
       id,
       ...updateProductDto,
     });
     if (productToUpdate) {
-      await this.productRepository.save(productToUpdate);
+      return await this.productRepository.save(productToUpdate);
     }
     throw new NotFoundException(`product with id: ${id} not found`);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number) {
+    const result = await this.productRepository.findOne({
+      where: { id },
+      relations: { photos: true },
+    });
+    if (!result) {
+      throw new NotFoundException(`product with id: ${id} not found`);
+    }
+    await this.productRepository.delete({ id });
+    result.photos.map((element) => {
+      unlinkFiles(element.url);
+    });
+    return result;
   }
 }

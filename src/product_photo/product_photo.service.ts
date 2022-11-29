@@ -6,6 +6,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ProductPhoto } from './entities/product_photo.entity';
 import { Repository } from 'typeorm';
 
+import { unlinkFiles } from '../utilities/unlinkFiles';
+
 @Injectable()
 export class ProductPhotoService {
   constructor(
@@ -26,7 +28,7 @@ export class ProductPhotoService {
       photo.url = element.filename;
       return photo;
     });
-    await this.productPhotoRepository.save(photos);
+    return await this.productPhotoRepository.save(photos);
   }
 
   create(createProductPhotoDto: CreateProductPhotoDto) {
@@ -45,7 +47,15 @@ export class ProductPhotoService {
     return `This action updates a #${id} productPhoto`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} productPhoto`;
+  async remove(id: number) {
+    const photo = await this.productPhotoRepository.findOneBy({ id });
+
+    if (!photo) {
+      throw new NotFoundException(`no photo exists with id: ${id}`);
+    }
+    const result = await this.productPhotoRepository.delete({ id });
+    const filename = photo.url;
+    unlinkFiles(filename);
+    return result;
   }
 }

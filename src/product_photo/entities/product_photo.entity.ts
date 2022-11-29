@@ -11,6 +11,8 @@ export class ProductPhoto extends Timestamp {
   @Column()
   url: string;
 
-  @ManyToOne(() => Product, (e) => e.photos)
+  @ManyToOne(() => Product, (e) => e.photos, {
+    onDelete: 'CASCADE',
+  })
   product: Product;
 }

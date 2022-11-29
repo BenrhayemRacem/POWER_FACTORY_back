@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFiles,
+  Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -15,6 +16,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName } from '../utilities/filename.utility';
+import { FindOptionsDto } from '../utilities/findOptions.dto';
 
 @Controller('product')
 export class ProductController {
@@ -37,8 +39,8 @@ export class ProductController {
   }
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  findAll(@Query() findOptions: FindOptionsDto) {
+    return this.productService.findAll(findOptions);
   }
 
   @Get(':id')
