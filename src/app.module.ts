@@ -6,7 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductModule } from './product/product.module';
 import { ProductPhotoModule } from './product_photo/product_photo.module';
 import { UserModule } from './user/user.module';
-import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
