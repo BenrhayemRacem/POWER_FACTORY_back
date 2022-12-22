@@ -1,26 +1,60 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
+  ) {}
+
+  async create(createUserDto: CreateUserDto) {
+    const user = await this.userRepository.save(createUserDto);
+    return user;
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    const users = await this.userRepository.find({
+      order: {
+        lastname: 'ASC',
+        id: 'DESC',
+      },
+    });
+    return users;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const result = await this.userRepository.findOne({
+      where: { id },
+    });
+    if (!result) {
+      throw new NotFoundException(`user with id: ${id} not found`);
+    }
+    return result;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const userToUpdate = await this.userRepository.preload({
+      id,
+      ...updateUserDto,
+    });
+    if (userToUpdate) {
+      return await this.userRepository.save(userToUpdate);
+    }
+    throw new NotFoundException(`user with id: ${id} not found`);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const result = await this.userRepository.findOne({
+      where: { id },
+    });
+    if (!result) {
+      throw new NotFoundException(`user with id: ${id} not found`);
+    }
+    await this.userRepository.delete({ id });
+    return result;
   }
 }
