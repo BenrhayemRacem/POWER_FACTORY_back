@@ -7,6 +7,7 @@ import { ProductModule } from './product/product.module';
 import { ProductPhotoModule } from './product_photo/product_photo.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
