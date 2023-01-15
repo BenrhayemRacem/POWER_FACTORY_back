@@ -1,5 +1,7 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { CoursePhoto } from 'src/course_photo/entities/course_photo.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity()
 export class Course {
   @PrimaryGeneratedColumn('increment')
   id: number;
@@ -9,4 +11,7 @@ export class Course {
 
   @Column()
   description: string;
+
+  @OneToMany(() => CoursePhoto, (e) => e.course)
+  photos: CoursePhoto[];
 }
