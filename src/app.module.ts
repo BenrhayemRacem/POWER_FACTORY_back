@@ -10,6 +10,8 @@ import { CourseModule } from './course/course.module';
 import { OrderModule } from './order/order.module';
 import { CoursePhotoModule } from './course_photo/course_photo.module';
 
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -39,6 +41,9 @@ import { CoursePhotoModule } from './course_photo/course_photo.module';
     CourseModule,
     OrderModule,
     CoursePhotoModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
