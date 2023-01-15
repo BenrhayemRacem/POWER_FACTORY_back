@@ -5,7 +5,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductModule } from './product/product.module';
 import { ProductPhotoModule } from './product_photo/product_photo.module';
-
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -31,6 +32,9 @@ import { ProductPhotoModule } from './product_photo/product_photo.module';
     }),
     ProductModule,
     ProductPhotoModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
