@@ -7,10 +7,13 @@ import {
   Param,
   Delete,
   UseInterceptors,
+  UploadedFiles,
+  Query,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName } from 'src/utilities/filename.utility';
+import { FindOptionsDto } from 'src/utilities/findOptions.dto';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -28,13 +31,16 @@ export class CourseController {
       }),
     }),
   )
-  create(@Body() createCourseDto: CreateCourseDto) {
+  create(
+    @Body() createCourseDto: CreateCourseDto,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
     return this.courseService.create(createCourseDto, files);
   }
 
   @Get()
-  findAll() {
-    return this.courseService.findAll();
+  findAll(@Query() findOptions: FindOptionsDto) {
+    return this.courseService.findAll(findOptions);
   }
 
   @Get(':id')
