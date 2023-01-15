@@ -5,6 +5,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductModule } from './product/product.module';
 import { ProductPhotoModule } from './product_photo/product_photo.module';
+import { UserModule } from './user/user.module';
+import { CourseModule } from './course/course.module';
+import { OrderModule } from './order/order.module';
+import { CoursePhotoModule } from './course_photo/course_photo.module';
 
 @Module({
   imports: [
@@ -31,6 +35,10 @@ import { ProductPhotoModule } from './product_photo/product_photo.module';
     }),
     ProductModule,
     ProductPhotoModule,
+    UserModule,
+    CourseModule,
+    OrderModule,
+    CoursePhotoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
