@@ -17,7 +17,7 @@ import { JwtStrategy } from './jwt.strategy';
     }),
     JwtModule.register({
       secret: 'El_Hanouta_Secret',
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '30d' },
     }),
   ],
   providers: [AuthService, JwtStrategy],

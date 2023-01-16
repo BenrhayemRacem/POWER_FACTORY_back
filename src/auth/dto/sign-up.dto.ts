@@ -1,4 +1,5 @@
 import { IsNumber, IsString } from 'class-validator';
+import { Type } from "class-transformer";
 
 export class SignUpDto {
   @IsString()
@@ -9,6 +10,7 @@ export class SignUpDto {
   firstname: string;
   @IsString()
   lastname: string;
+  @Type(()=>Number)
   @IsNumber()
   telephone: number;
 }

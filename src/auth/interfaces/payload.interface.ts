@@ -1,6 +1,6 @@
-import { RoleEnum } from 'src/enums/role.enum';
+import { UserRole } from "../../user/enums/role.enum";
 
 export interface PayloadInterface {
   username: string;
-  role: RoleEnum;
+  role: UserRole;
 }

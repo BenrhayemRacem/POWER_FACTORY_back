@@ -1,6 +1,6 @@
-import { RoleEnum } from 'src/enums/role.enum';
 import { Order } from 'src/order/entities/order.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { UserRole } from "../enums/role.enum";
 
 
 @Entity()
@@ -19,8 +19,8 @@ export class User {
 
   @Column({
     type: 'enum',
-    enum: RoleEnum,
-    default: RoleEnum.USER,
+    enum: UserRole,
+    default: UserRole.User,
   })
   role: string;
 
