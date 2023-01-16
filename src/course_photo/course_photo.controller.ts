@@ -8,9 +8,12 @@ import {
   Delete,
   UseInterceptors,
   UploadedFiles,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { AdminGuard } from 'src/auth/guards/admin.guard';
 import { editFileName } from 'src/utilities/filename.utility';
 import { CoursePhotoService } from './course_photo.service';
 import { CreateCoursePhotoDto } from './dto/create-course_photo.dto';
@@ -25,6 +28,7 @@ export class CoursePhotoController {
     return this.coursePhotoService.create(createCoursePhotoDto);
   }
   @Post('/:courseId')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   @UseInterceptors(
     FilesInterceptor('files', 10, {
       storage: diskStorage({
@@ -50,6 +54,7 @@ export class CoursePhotoController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   update(
     @Param('id') id: string,
     @Body() updateCoursePhotoDto: UpdateCoursePhotoDto,
@@ -58,6 +63,7 @@ export class CoursePhotoController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   remove(@Param('id') id: string) {
     return this.coursePhotoService.remove(+id);
   }

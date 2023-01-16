@@ -44,6 +44,7 @@ export class AuthService {
         role: user.role,
         expiresIn: 1200,
       };
+
       const jwt = await this.jwtService.sign(payload);
       return {
         access_token: jwt,
