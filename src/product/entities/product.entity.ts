@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Timestamp } from '../../utilities/timestamp.entity';
 import { ProductAvailabilityEnum } from '../../enums/productAvailability.enum';
 import { ProductPhoto } from '../../product_photo/entities/product_photo.entity';
+import { OrdersProducts } from 'src/order/entities/order-products.entity';
 
 @Entity()
 export class Product extends Timestamp {
@@ -31,4 +32,9 @@ export class Product extends Timestamp {
 
   @OneToMany(() => ProductPhoto, (e) => e.product)
   photos: ProductPhoto[];
+  @OneToMany(
+    () => OrdersProducts,
+    (OrdersProducts: OrdersProducts) => OrdersProducts.product,
+  )
+  OrdersProducts: OrdersProducts[];
 }

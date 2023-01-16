@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Order } from 'src/order/entities/order.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { UserRole } from '../enums/role.enum';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('increment')
@@ -17,4 +19,10 @@ export class User {
 
   @Column()
   telephone: number;
+
+  @Column()
+  role: UserRole;
+
+  @OneToMany(() => Order, (order: Order) => order.user)
+  orders: Order[];
 }

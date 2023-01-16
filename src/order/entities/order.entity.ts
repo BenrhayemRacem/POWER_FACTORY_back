@@ -3,21 +3,41 @@ import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   Entity,
-  OneToOne,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
-  Timestamp,
 } from 'typeorm';
+import { OrdersProducts } from './order-products.entity';
 
-interface ProductOrder {
-  product: Product;
-  quantity: number;
-}
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn('increment')
   id: number;
+
+  @Column({ length: 50 })
+  adress: string;
+
+  @Column('decimal', {
+    precision: 8,
+    scale: 2,
+  })
+  price: number;
+
+  @Column({ length: 25 })
+  date: string;
+
+  @Column({ length: 50 })
+  status: string;
+
+  @ManyToOne(() => User, (user: User) => user.orders)
+  user: User;
+
   @Column()
-  totalPrice: Number;
-  @Column()
-  created: Date;
+  userId: number;
+
+  @OneToMany(
+    () => OrdersProducts,
+    (OrdersProducts: OrdersProducts) => OrdersProducts.order,
+  )
+  OrdersProducts: OrdersProducts[];
 }
