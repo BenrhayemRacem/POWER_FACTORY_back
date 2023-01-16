@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFiles,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductPhotoService } from './product_photo.service';
 import { CreateProductPhotoDto } from './dto/create-product_photo.dto';
@@ -15,17 +16,21 @@ import { UpdateProductPhotoDto } from './dto/update-product_photo.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName } from '../utilities/filename.utility';
+import { AdminGuard } from 'src/auth/guards/admin.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('product-photo')
 export class ProductPhotoController {
   constructor(private readonly productPhotoService: ProductPhotoService) {}
 
   @Post()
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   create(@Body() createProductPhotoDto: CreateProductPhotoDto) {
     return this.productPhotoService.create(createProductPhotoDto);
   }
 
   @Post('/:productId')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   @UseInterceptors(
     FilesInterceptor('files', 10, {
       storage: diskStorage({
@@ -52,13 +57,14 @@ export class ProductPhotoController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   update(
     @Param('id') id: string,
     @Body() updateProductPhotoDto: UpdateProductPhotoDto,
   ) {
     return this.productPhotoService.update(+id, updateProductPhotoDto);
   }
-
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.productPhotoService.remove(+id);
