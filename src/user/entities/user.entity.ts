@@ -1,6 +1,8 @@
+import { RoleEnum } from 'src/enums/role.enum';
 import { Order } from 'src/order/entities/order.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { UserRole } from '../enums/role.enum';
+
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('increment')
@@ -11,6 +13,17 @@ export class User {
 
   @Column()
   password: string;
+
+  @Column()
+  salt: string;
+
+  @Column({
+    type: 'enum',
+    enum: RoleEnum,
+    default: RoleEnum.USER,
+  })
+  role: string;
+
   @Column()
   firstname: string;
 
@@ -19,9 +32,6 @@ export class User {
 
   @Column()
   telephone: number;
-
-  @Column()
-  role: UserRole;
 
   @OneToMany(() => Order, (order: Order) => order.user)
   orders: Order[];
