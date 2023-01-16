@@ -6,9 +6,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductModule } from './product/product.module';
 import { ProductPhotoModule } from './product_photo/product_photo.module';
 import { UserModule } from './user/user.module';
+<<<<<<< HEAD
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+=======
+import { CourseModule } from './course/course.module';
+import { OrderModule } from './order/order.module';
+import { CoursePhotoModule } from './course_photo/course_photo.module';
+>>>>>>> 154ab9612616b6a50209375d9b82d7c5ba32d358
 
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -36,6 +44,12 @@ import { JwtModule } from '@nestjs/jwt';
     ProductPhotoModule,
     AuthModule,
     UserModule,
+    CourseModule,
+    OrderModule,
+    CoursePhotoModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

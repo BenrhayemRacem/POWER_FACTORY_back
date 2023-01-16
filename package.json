@@ -28,10 +28,16 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/serve-static": "^3.0.0",
     "@nestjs/typeorm": "^9.0.1",
+<<<<<<< HEAD
     "bcrypt": "^5.1.0",
+=======
+    "@types/cors": "^2.8.13",
+>>>>>>> 154ab9612616b6a50209375d9b82d7c5ba32d358
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "mysql2": "^2.3.3",
     "passport": "^0.6.0",
