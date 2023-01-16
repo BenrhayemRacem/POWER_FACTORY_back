@@ -59,6 +59,15 @@ export class ProductService {
     return result;
   }
 
+  async findManyByIds(arrayOfIds: Array<Number>) {
+    const products = await this.productRepository
+      .createQueryBuilder()
+      .where('id IN(:...arrayOfIds)', { arrayOfIds })
+      .getMany();
+
+    return products;
+  }
+
   async update(id: number, updateProductDto: UpdateProductDto) {
     const productToUpdate = await this.productRepository.preload({
       id,
