@@ -42,7 +42,7 @@ export class AuthService {
       const payload = {
         username: user.username,
         role: user.role,
-        expiresIn: 1200,
+        expiresIn: "30d",
       };
 
       const jwt = await this.jwtService.sign(payload);
