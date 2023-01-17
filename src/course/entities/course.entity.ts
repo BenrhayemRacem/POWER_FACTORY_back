@@ -11,6 +11,7 @@ export class Course {
 
   @Column()
   description: string;
+  
 
   @OneToMany(() => CoursePhoto, (e) => e.course)
   photos: CoursePhoto[];
