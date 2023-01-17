@@ -42,6 +42,7 @@ export class AuthService {
       const payload = {
         username: user.username,
         role: user.role,
+        id: user.id,
         expiresIn: "30d",
       };
 

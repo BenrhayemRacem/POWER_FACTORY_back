@@ -10,9 +10,11 @@ import {
 } from 'class-validator';
 
 export class ProductDto {
+  @Type(()=>Number)
   @IsNumber()
   id: number;
 
+  @Type(()=>Number)
   @IsNumber()
   @IsInt()
   @Min(1)

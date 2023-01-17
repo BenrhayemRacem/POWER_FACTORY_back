@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 export class JwtAuthGuard extends AuthGuard('jwt') {
   canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
-    return request.user;
+
+    return request.user ;
   }
 }

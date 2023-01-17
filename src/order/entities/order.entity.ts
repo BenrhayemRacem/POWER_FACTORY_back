@@ -16,7 +16,7 @@ export class Order extends Timestamp {
   id: number;
 
   @Column({ length: 50 })
-  adress: string;
+  address: string;
 
   @Column('decimal')
   price: number;
