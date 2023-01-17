@@ -7,4 +7,10 @@ export class CreateCourseDto {
   @IsString()
   name:string;
 
+  @IsString()
+  date:string;
+
+  @IsString()
+  time:string;
+
 }

@@ -13,6 +13,11 @@ export class Course extends Timestamp {
   @Column()
   description: string;
   
+  @Column()
+  date: string;
+
+  @Column()
+  time: string;
 
   @OneToMany(() => CoursePhoto, (e) => e.course)
   photos: CoursePhoto[];
