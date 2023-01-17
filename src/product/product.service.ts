@@ -32,13 +32,14 @@ export class ProductService {
         : 'DESC'
       : 'ASC';
     const page = findOptions.page ? findOptions.page : 1;
-    const perPage = findOptions.perPage ? findOptions.perPage : 10;
+    const perPage =  8;
 
     queryBuilder
       .orderBy(`product.${orderBy}`, sort)
-      .offset((page - 1) * perPage)
-      .limit(perPage)
-      .leftJoinAndSelect('product.photos', 'photos');
+      .offset((page - 1) * perPage*4)
+      
+      .leftJoinAndSelect('product.photos', 'photos')
+      .limit(perPage*4);
     const total = await queryBuilder.getCount();
     return {
       data: await queryBuilder.getMany(),
