@@ -35,10 +35,10 @@ export class CourseService {
     const perPage = findOptions.perPage ? findOptions.perPage : 10;
 
     queryBuilder
-      .orderBy(`product.${orderBy}`, sort)
+      .orderBy(`course.${orderBy}`, sort)
       .offset((page - 1) * perPage)
       .limit(perPage)
-      .leftJoinAndSelect('product.photos', 'photos');
+      .leftJoinAndSelect('course.photos', 'photos');
     const total = await queryBuilder.getCount();
     return {
       data: await queryBuilder.getMany(),
