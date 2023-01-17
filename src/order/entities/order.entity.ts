@@ -8,23 +8,18 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { OrdersProducts } from './order-products.entity';
+import { Timestamp } from '../../utilities/timestamp.entity';
 
 @Entity()
-export class Order {
+export class Order extends Timestamp {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column({ length: 50 })
-  adress: string;
+  address: string;
 
-  @Column('decimal', {
-    precision: 8,
-    scale: 2,
-  })
+  @Column('decimal')
   price: number;
-
-  @Column({ length: 25 })
-  date: string;
 
   @Column({ length: 50 })
   status: string;

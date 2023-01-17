@@ -10,9 +10,11 @@ import {
 } from 'class-validator';
 
 export class ProductDto {
+  @Type(()=>Number)
   @IsNumber()
   id: number;
 
+  @Type(()=>Number)
   @IsNumber()
   @IsInt()
   @Min(1)
@@ -21,10 +23,7 @@ export class ProductDto {
 
 export class CreateOrderDto {
   @IsString()
-  readonly adress: string;
-
-  @IsString()
-  readonly date: string;
+  readonly address: string;
 
   @IsArray()
   @ArrayMinSize(1)
