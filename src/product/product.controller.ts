@@ -42,8 +42,11 @@ export class ProductController {
     return this.productService.create(createProductDto, files);
   }
   @Get()
-  findAll(@Query() findOptions: FindOptionsDto) {
-    return this.productService.findAll(findOptions);
+  async findAll(@Query() findOptions: FindOptionsDto) {
+    console.log('====================================');
+    console.log(await (await this.productService.findAll(findOptions)).data);
+    console.log('====================================');
+    return await this.productService.findAll(findOptions);
   }
 
   @Get(':id')
