@@ -21,7 +21,7 @@ export class Order extends Timestamp {
   @Column('decimal')
   price: number;
 
-  @Column({ length: 50 })
+  @Column({ length: 50 ,default:"processing"})
   status: string;
 
   @ManyToOne(() => User, (user: User) => user.orders)
